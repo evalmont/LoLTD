@@ -138,14 +138,14 @@ void SceneNode::checkNodeCollision(SceneNode& node, std::set<Pair>& collisionPai
 		child->checkNodeCollision(node, collisionPairs);
 }
 
-void SceneNode::removeNode()
+void SceneNode::removeNodes()
 {
 	// Remove all children which request so
 	auto removeBegin = std::remove_if(children_.begin(), children_.end(), std::mem_fn(&SceneNode::isMarkedForRemoval));
 	children_.erase(removeBegin, children_.end());
 
 	// Call function recursively for all remaining children
-	std::for_each(children_.begin(), children_.end(), std::mem_fn(&SceneNode::removeNode));
+	std::for_each(children_.begin(), children_.end(), std::mem_fn(&SceneNode::removeNodes));
 }
 
 sf::FloatRect SceneNode::getBoundingRect() const
