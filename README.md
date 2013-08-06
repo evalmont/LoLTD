@@ -1,10 +1,11 @@
 League of Legends: Tower Defense
 
-- Goal -
+
+- Goal
 
 The goal of this project to get experience developing a simple video game.  This is a non-profit project and is primarily for learning purposes.
 
-- Inspiration -
+- Inspiration
 
 As an avid League of Legends player I've decided to take it's theme and apply it to another style game.
 
