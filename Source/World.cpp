@@ -1,5 +1,6 @@
 #include <World.hpp>
 #include <Foreach.hpp>
+#include <SpriteNode.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
 #include <algorithm>
@@ -8,21 +9,21 @@
 
 
 World::World(sf::RenderWindow& window, FontHolder& fonts)
-: mWindow(window)
-, mFonts(fonts)
-, mWorldView(window.getDefaultView())
-, mTextures()
-, mSceneGraph()
-, mSceneLayers()
-, mWorldBounds(0.f, 0.f, mWorldView.getSize().x, mWorldView.getSize().y)
-, mEnemySpawnPoints()
-, mActiveEnemies()
+: window_(window)
+, fonts_(fonts)
+, worldView_(window.getDefaultView())
+, textures_()
+, sceneGraph_()
+, sceneLayers_()
+, worldBounds_(0.f, 0.f, worldView_.getSize().x, worldView_.getSize().y)
+, enemySpawnPoints_()
+, activeEnemies_()
 {
 	loadTextures();
 	buildScene();
 
 	// Prepare the view
-	mWorldView.setCenter(mWorldView.getSize().x / 2.f, mWorldView.getSize().y / 2.f);
+	worldView_.setCenter(worldView_.getSize().x / 2.f, worldView_.getSize().y / 2.f);
 }
 
 void World::update(sf::Time dt)
@@ -31,33 +32,34 @@ void World::update(sf::Time dt)
 	destroyEntitiesOutsideView();
 
 	// Forward commands to scene graph
-	while (!mCommandQueue.isEmpty())
-		mSceneGraph.onCommand(mCommandQueue.pop(), dt);
+	while (!commandQueue_.isEmpty())
+		sceneGraph_.onCommand(commandQueue_.pop(), dt);
 
 	// Collision detection and response (may destroy entities)
 	handleCollisions();
 
 	// Remove all destroyed entities, create new ones
-	mSceneGraph.removeNodes();
+	sceneGraph_.removeNodes();
 	spawnEnemies();
 
 	// Regular update step
-	mSceneGraph.update(dt, mCommandQueue);
+	sceneGraph_.update(dt, commandQueue_);
 }
 
 void World::draw()
 {
-	mWindow.setView(mWorldView);
-	mWindow.draw(mSceneGraph);
+	window_.setView(worldView_);
+	window_.draw(sceneGraph_);
 }
 
 CommandQueue& World::getCommandQueue()
 {
-	return mCommandQueue;
+	return commandQueue_;
 }
 
 void World::loadTextures()
 {
+   	textures_.load(Textures::Background,		"Media/Textures/EmptyGrid_32x24_Black.png");
 }
 
 bool matchesCategories(SceneNode::Pair& colliders, Category::Type type1, Category::Type type2)
@@ -88,7 +90,7 @@ bool matchesCategories(SceneNode::Pair& colliders, Category::Type type1, Categor
 void World::handleCollisions()
 {
 	std::set<SceneNode::Pair> collisionPairs;
-	mSceneGraph.checkSceneCollision(mSceneGraph, collisionPairs);
+	sceneGraph_.checkSceneCollision(sceneGraph_, collisionPairs);
 
 	FOREACH(SceneNode::Pair pair, collisionPairs)
 	{
@@ -104,19 +106,19 @@ void World::buildScene()
 		Category::Type category = (i == Field) ? Category::SceneFieldLayer : Category::None;
 
 		SceneNode::Ptr layer(new SceneNode(category));
-		mSceneLayers[i] = layer.get();
+		sceneLayers_[i] = layer.get();
 
-		mSceneGraph.attachChild(std::move(layer));
+		sceneGraph_.attachChild(std::move(layer));
 	}
 
-	// Prepare the tiled background
-	//sf::Texture& texture = mTextures.get(Textures::Desert);
-	sf::IntRect textureRect(mWorldBounds);
+	// Prepare the background
+	sf::Texture& texture = textures_.get(Textures::Background);
+	sf::IntRect textureRect(worldBounds_);
 
 	// Add the background sprite to the scene
-	//std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(texture, textureRect));
-	//backgroundSprite->setPosition(mWorldBounds.left, mWorldBounds.top);
-	//mSceneLayers[Background]->attachChild(std::move(backgroundSprite));
+	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(texture, textureRect));
+	backgroundSprite->setPosition(worldBounds_.left, worldBounds_.top);
+	sceneLayers_[Background]->attachChild(std::move(backgroundSprite));
 }
 
 void World::addEnemies()
@@ -126,24 +128,24 @@ void World::addEnemies()
 void World::addEnemy(Minion::Type type, float x, float y)
 {
 	SpawnPoint spawn(type, x, y);
-	mEnemySpawnPoints.push_back(spawn);
+	enemySpawnPoints_.push_back(spawn);
 }
 
 void World::spawnEnemies()
 {
     /*
 	// Spawn all enemies entering the view area (including distance) this frame
-	while ( !mEnemySpawnPoints.empty() )
+	while ( !enemySpawnPoints_.empty() )
 	{
-		SpawnPoint spawn = mEnemySpawnPoints.back();
+		SpawnPoint spawn = enemySpawnPoints_.back();
 
-		std::unique_ptr<Minion> enemy(new Minion(spawn.type, mTextures, mFonts));
+		std::unique_ptr<Minion> enemy(new Minion(spawn.type, textures_, fonts_));
 		//enemy->setPosition(spawn.x, spawn.y);
 
-		mSceneLayers[Field]->attachChild(std::move(enemy));
+		sceneLayers_[Field]->attachChild(std::move(enemy));
 
 		// Enemy is spawned, remove from the list to spawn
-		mEnemySpawnPoints.pop_back();
+		enemySpawnPoints_.pop_back();
 	}
 	*/
 }
@@ -159,13 +161,13 @@ void World::destroyEntitiesOutsideView()
 			sN.destroy();
 	});
 
-	mCommandQueue.push(command);
+	commandQueue_.push(command);
 	*/
 }
 
 sf::FloatRect World::getViewBounds() const
 {
-	return mWorldBounds;
+	return worldBounds_;
 }
 
 sf::FloatRect World::getBattlefieldBounds() const

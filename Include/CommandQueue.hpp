@@ -15,7 +15,7 @@ class CommandQueue
 
 
 	private:
-		std::queue<Command>			mQueue;
+		std::queue<Command>			queue_;
 };
 
 #endif // BOOK_COMMANDQUEUE_HPP

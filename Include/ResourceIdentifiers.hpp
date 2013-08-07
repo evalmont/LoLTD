@@ -13,6 +13,7 @@ namespace Textures
 {
 	enum ID
 	{
+	    Background,
 		ButtonNormal,
 		ButtonSelected,
 		ButtonPressed

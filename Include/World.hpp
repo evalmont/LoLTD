@@ -39,6 +39,7 @@ class World : private sf::NonCopyable
 		void								addEnemies();
 		void								addEnemy(Minion::Type type, float relX, float relY);
 		void								spawnEnemies();
+		void                                destroyEntitiesOutsideView();
 		sf::FloatRect						getViewBounds() const;
 		sf::FloatRect						getBattlefieldBounds() const;
 
@@ -47,7 +48,7 @@ class World : private sf::NonCopyable
 		enum Layer
 		{
 			Background,
-			Feild,
+			Field,
 			LayerCount
 		};
 
@@ -67,19 +68,19 @@ class World : private sf::NonCopyable
 
 
 	private:
-		sf::RenderWindow&					mWindow;
-		sf::View							mWorldView;
-		TextureHolder						mTextures;
-		FontHolder&							mFonts;
+		sf::RenderWindow&					window_;
+		sf::View							worldView_;
+		TextureHolder						textures_;
+		FontHolder&							fonts_;
 
-		SceneNode							mSceneGraph;
-		std::array<SceneNode*, LayerCount>	mSceneLayers;
-		CommandQueue						mCommandQueue;
+		SceneNode							sceneGraph_;
+		std::array<SceneNode*, LayerCount>	sceneLayers_;
+		CommandQueue						commandQueue_;
 
-		sf::FloatRect						mWorldBounds;
+		sf::FloatRect						worldBounds_;
 
-		std::vector<SpawnPoint>				mEnemySpawnPoints;
-		std::vector<Minion*>				mActiveEnemies;
+		std::vector<SpawnPoint>				enemySpawnPoints_;
+		std::vector<Minion*>				activeEnemies_;
 };
 
 #endif // BOOK_WORLD_HPP

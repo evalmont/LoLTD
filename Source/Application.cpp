@@ -1,5 +1,8 @@
 #include <Application.hpp>
 #include <Utility.hpp>
+#include <State.hpp>
+#include <StateIdentifiers.hpp>
+#include <GameState.hpp>
 
 
 const sf::Time Application::TimePerFrame = sf::seconds(1.f/60.f);
@@ -8,6 +11,7 @@ Application::Application()
 : window_(sf::VideoMode(1024, 768), "LoLTD", sf::Style::Close)
 , textures_()
 , fonts_()
+, stateStack_(State::Context(window_, textures_, fonts_))
 , statisticsText_()
 , statisticsUpdateTime_()
 , statisticsNumFrames_(0)
@@ -23,6 +27,9 @@ Application::Application()
 	statisticsText_.setFont(fonts_.get(Fonts::Main));
 	statisticsText_.setPosition(5.f, 5.f);
 	statisticsText_.setCharacterSize(10u);
+
+	registerStates();
+	stateStack_.pushState(States::Game);
 }
 
 void Application::run()
@@ -52,6 +59,8 @@ void Application::processInput()
 	sf::Event event;
 	while (window_.pollEvent(event))
 	{
+		stateStack_.handleEvent(event);
+
 		if (event.type == sf::Event::Closed)
 			window_.close();
 	}
@@ -59,12 +68,14 @@ void Application::processInput()
 
 void Application::update(sf::Time dt)
 {
+    stateStack_.update(dt);
 }
 
 void Application::render()
 {
 	window_.clear();
 
+	stateStack_.draw();
 	window_.setView(window_.getDefaultView());
 	window_.draw(statisticsText_);
 
@@ -82,4 +93,9 @@ void Application::updateStatistics(sf::Time dt)
 		statisticsUpdateTime_ -= sf::seconds(1.0f);
 		statisticsNumFrames_ = 0;
 	}
+}
+
+void Application::registerStates()
+{
+	stateStack_.registerState<GameState>(States::Game);
 }

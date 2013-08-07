@@ -1,8 +1,10 @@
 #ifndef BOOK_APPLICATION_HPP
 #define BOOK_APPLICATION_HPP
 
+#include <World.hpp>
 #include <ResourceHolder.hpp>
 #include <ResourceIdentifiers.hpp>
+#include <StateStack.hpp>
 
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -31,6 +33,8 @@ class Application
 		sf::RenderWindow		window_;
 		TextureHolder			textures_;
 		FontHolder				fonts_;
+
+        StateStack				stateStack_;
 
 		sf::Text				statisticsText_;
 		sf::Time				statisticsUpdateTime_;
