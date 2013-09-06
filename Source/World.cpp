@@ -15,15 +15,15 @@ World::World(sf::RenderWindow& window, FontHolder& fonts)
 , textures_()
 , sceneGraph_()
 , sceneLayers_()
-, worldBounds_(0.f, 0.f, worldView_.getSize().x, worldView_.getSize().y)
-, enemySpawnPoints_()
-, activeEnemies_()
+, worldBounds_(0.f, 0.f, worldView_.getSize().x - 200, worldView_.getSize().y) // - 200 to account for the GUI
+, minionSpawnPoints_()
+, activeMinions_()
 {
 	loadTextures();
 	buildScene();
 
 	// Prepare the view
-	worldView_.setCenter(worldView_.getSize().x / 2.f, worldView_.getSize().y / 2.f);
+	worldView_.setCenter( worldView_.getSize().x / 2.f, worldView_.getSize().y / 2.f);
 }
 
 void World::update(sf::Time dt)
@@ -40,7 +40,7 @@ void World::update(sf::Time dt)
 
 	// Remove all destroyed entities, create new ones
 	sceneGraph_.removeNodes();
-	spawnEnemies();
+	spawnMinions();
 
 	// Regular update step
 	sceneGraph_.update(dt, commandQueue_);
@@ -60,6 +60,8 @@ CommandQueue& World::getCommandQueue()
 void World::loadTextures()
 {
    	textures_.load(Textures::Background,		"Media/Textures/EmptyGrid_32x24_Black.png");
+
+   	textures_.load(Textures::Minion01,          "Media/Textures/Minion01.png");
 }
 
 bool matchesCategories(SceneNode::Pair& colliders, Category::Type type1, Category::Type type2)
@@ -92,10 +94,12 @@ void World::handleCollisions()
 	std::set<SceneNode::Pair> collisionPairs;
 	sceneGraph_.checkSceneCollision(sceneGraph_, collisionPairs);
 
+/*
 	FOREACH(SceneNode::Pair pair, collisionPairs)
 	{
-	    // matchesCategories(pair, type1, type2);
+	     matchesCategories(pair, type1, type2);
 	}
+*/
 }
 
 void World::buildScene()
@@ -119,35 +123,38 @@ void World::buildScene()
 	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(texture, textureRect));
 	backgroundSprite->setPosition(worldBounds_.left, worldBounds_.top);
 	sceneLayers_[Background]->attachChild(std::move(backgroundSprite));
+
+	// Add enemy aircraft
+	addMinions();
 }
 
-void World::addEnemies()
+void World::addMinions()
 {
+    addMinion(Minion::Standard,  -50,  (32.f*3.0)-16.0 );
 }
 
-void World::addEnemy(Minion::Type type, float x, float y)
+void World::addMinion(Minion::Type type, float x, float y)
 {
 	SpawnPoint spawn(type, x, y);
-	enemySpawnPoints_.push_back(spawn);
+	minionSpawnPoints_.push_back(spawn);
 }
 
-void World::spawnEnemies()
+void World::spawnMinions()
 {
-    /*
+
 	// Spawn all enemies entering the view area (including distance) this frame
-	while ( !enemySpawnPoints_.empty() )
+	while ( !minionSpawnPoints_.empty() )
 	{
-		SpawnPoint spawn = enemySpawnPoints_.back();
+		SpawnPoint spawn = minionSpawnPoints_.back();
 
-		std::unique_ptr<Minion> enemy(new Minion(spawn.type, textures_, fonts_));
-		//enemy->setPosition(spawn.x, spawn.y);
+		std::unique_ptr<Minion> minion(new Minion(spawn.type, textures_, fonts_));
+		minion->setPosition(spawn.x, spawn.y);
 
-		sceneLayers_[Field]->attachChild(std::move(enemy));
+		sceneLayers_[Field]->attachChild(std::move(minion));
 
 		// Enemy is spawned, remove from the list to spawn
-		enemySpawnPoints_.pop_back();
+		minionSpawnPoints_.pop_back();
 	}
-	*/
 }
 
 void World::destroyEntitiesOutsideView()

@@ -8,7 +8,7 @@
 const sf::Time Application::TimePerFrame = sf::seconds(1.f/60.f);
 
 Application::Application()
-: window_(sf::VideoMode(1024, 768), "LoLTD", sf::Style::Close)
+: window_(sf::VideoMode(1224, 768), "LoLTD", sf::Style::Close) // 1024 x 768 + 200 for GUI
 , textures_()
 , fonts_()
 , stateStack_(State::Context(window_, textures_, fonts_))

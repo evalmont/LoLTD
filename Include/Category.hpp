@@ -2,7 +2,7 @@
 #define BOOK_CATEGORY_HPP
 
 
-// Entity/scene node category, used to dispatch commands
+// Scene node category, used to dispatch commands
 namespace Category
 {
 	enum Type

@@ -16,7 +16,8 @@ namespace Textures
 	    Background,
 		ButtonNormal,
 		ButtonSelected,
-		ButtonPressed
+		ButtonPressed,
+		Minion01
 	};
 }
 
