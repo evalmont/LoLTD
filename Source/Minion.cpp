@@ -88,8 +88,6 @@ void Minion::updateMovementPattern(sf::Time dt)
 
 		setVelocity(vx, vy);
 
-        //setVelocity(100,0);
-
 		travelledDistance_ += getMaxSpeed() * dt.asSeconds();
 
 		move(velocity_ * dt.asSeconds());

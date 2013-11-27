@@ -38,7 +38,7 @@ class World : private sf::NonCopyable
 		void								buildScene();
 		void								addMinions();
 		void								addMinion(Minion::Type type, float relX, float relY);
-		void								spawnMinions();
+		void								spawnMinions(sf::Time dt);
 		void                                destroyEntitiesOutsideView();
 		sf::FloatRect						getViewBounds() const;
 		sf::FloatRect						getBattlefieldBounds() const;
@@ -81,6 +81,7 @@ class World : private sf::NonCopyable
 
 		std::vector<SpawnPoint>				minionSpawnPoints_;
 		std::vector<Minion*>				activeMinions_;
+		sf::Time                            timeSinceLastSpawn_;
 };
 
 #endif // BOOK_WORLD_HPP

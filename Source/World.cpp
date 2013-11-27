@@ -18,6 +18,7 @@ World::World(sf::RenderWindow& window, FontHolder& fonts)
 , worldBounds_(0.f, 0.f, worldView_.getSize().x - 200, worldView_.getSize().y) // - 200 to account for the GUI
 , minionSpawnPoints_()
 , activeMinions_()
+, timeSinceLastSpawn_(sf::seconds(0.0f))
 {
 	loadTextures();
 	buildScene();
@@ -40,7 +41,7 @@ void World::update(sf::Time dt)
 
 	// Remove all destroyed entities, create new ones
 	sceneGraph_.removeNodes();
-	spawnMinions();
+	spawnMinions(dt);
 
 	// Regular update step
 	sceneGraph_.update(dt, commandQueue_);
@@ -130,7 +131,12 @@ void World::buildScene()
 
 void World::addMinions()
 {
-    addMinion(Minion::Standard,  -50,  (32.f*3.0)-16.0 );
+    addMinion(Minion::Standard,  -50,  (31.f*3.0)-13.0 );
+    addMinion(Minion::Standard,  -50,  (31.f*3.0)-13.0 );
+    addMinion(Minion::Standard,  -50,  (31.f*3.0)-13.0 );
+    addMinion(Minion::Standard,  -50,  (31.f*3.0)-13.0 );
+    addMinion(Minion::Standard,  -50,  (31.f*3.0)-13.0 );
+    addMinion(Minion::Standard,  -50,  (31.f*3.0)-13.0 );
 }
 
 void World::addMinion(Minion::Type type, float x, float y)
@@ -139,12 +145,11 @@ void World::addMinion(Minion::Type type, float x, float y)
 	minionSpawnPoints_.push_back(spawn);
 }
 
-void World::spawnMinions()
+void World::spawnMinions(sf::Time dt)
 {
-
-	// Spawn all enemies entering the view area (including distance) this frame
-	while ( !minionSpawnPoints_.empty() )
-	{
+    timeSinceLastSpawn_ += dt;
+    if( timeSinceLastSpawn_ >= sf::seconds(1.0f) && !minionSpawnPoints_.empty() )
+    {
 		SpawnPoint spawn = minionSpawnPoints_.back();
 
 		std::unique_ptr<Minion> minion(new Minion(spawn.type, textures_, fonts_));
@@ -154,7 +159,8 @@ void World::spawnMinions()
 
 		// Enemy is spawned, remove from the list to spawn
 		minionSpawnPoints_.pop_back();
-	}
+		timeSinceLastSpawn_ = sf::seconds(0.0f);
+    }
 }
 
 void World::destroyEntitiesOutsideView()
@@ -181,6 +187,7 @@ sf::FloatRect World::getBattlefieldBounds() const
 {
 	// Return view bounds + some area at top, where enemies spawn
 	sf::FloatRect bounds = getViewBounds();
+	printf("Top: %g Height: %g Left: %g Width: %g\n",bounds.top, bounds.height, bounds.left, bounds.width);
 	bounds.top -= 100.f;
 	bounds.height += 100.f;
 	bounds.left -= 100.f;
