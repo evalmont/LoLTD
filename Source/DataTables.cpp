@@ -10,7 +10,7 @@ std::vector<MinionData> initializeMinionData()
 	std::vector<MinionData> data(Minion::TypeCount);
 
 	data[Minion::Standard].hitpoints = 100;
-	data[Minion::Standard].speed = 100.f;
+	data[Minion::Standard].speed = 300.f;
 	data[Minion::Standard].texture = Textures::Minion01;
 	data[Minion::Standard].directions.push_back(Direction(  0.f,  (32.f*6 )));
 	data[Minion::Standard].directions.push_back(Direction(+90.f,  (32.f*18)));

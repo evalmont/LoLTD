@@ -165,17 +165,15 @@ void World::spawnMinions(sf::Time dt)
 
 void World::destroyEntitiesOutsideView()
 {
-    /*
 	Command command;
 	command.category = Category::Minion;
-	command.action = derivedAction<SceneNode>([this] (SceneNode& sN, sf::Time)
+	command.action = derivedAction<Minion>([this] (Minion& m, sf::Time)
 	{
-		if (!getBattlefieldBounds().intersects(sN.getBoundingRect()))
-			sN.destroy();
+		if (!getBattlefieldBounds().intersects(m.getBoundingRect()))
+			m.destroy();
 	});
 
 	commandQueue_.push(command);
-	*/
 }
 
 sf::FloatRect World::getViewBounds() const
@@ -187,11 +185,10 @@ sf::FloatRect World::getBattlefieldBounds() const
 {
 	// Return view bounds + some area at top, where enemies spawn
 	sf::FloatRect bounds = getViewBounds();
-	printf("Top: %g Height: %g Left: %g Width: %g\n",bounds.top, bounds.height, bounds.left, bounds.width);
-	bounds.top -= 100.f;
-	bounds.height += 100.f;
-	bounds.left -= 100.f;
-	bounds.width += 100.f;
+	bounds.top -= 0.f;
+	bounds.height += 0.f;
+	bounds.left -= 50.f;
+	bounds.width += 48.f;
 
 	return bounds;
 }
