@@ -30,6 +30,11 @@ struct MinionData
 	Textures::ID					texture;
 	std::vector<Direction>			directions;
 };
+
+struct TurretData
+{
+	Textures::ID					texture;
+};
 /*
 struct ProjectileData
 {
@@ -39,6 +44,7 @@ struct ProjectileData
 };*/
 
 std::vector<MinionData>	initializeMinionData();
+std::vector<TurretData>	initializeTurretData();
 //std::vector<ProjectileData>	initializeProjectileData();
 
 #endif // BOOK_DATATABLES_HPP

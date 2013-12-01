@@ -17,6 +17,7 @@ World::World(sf::RenderWindow& window, FontHolder& fonts)
 , sceneLayers_()
 , worldBounds_(0.f, 0.f, worldView_.getSize().x - 200, worldView_.getSize().y) // - 200 to account for the GUI
 , minionSpawnPoints_()
+, turretSpawnPoints_()
 , activeMinions_()
 , timeSinceLastSpawn_(sf::seconds(0.0f))
 {
@@ -42,6 +43,7 @@ void World::update(sf::Time dt)
 	// Remove all destroyed entities, create new ones
 	sceneGraph_.removeNodes();
 	spawnMinions(dt);
+	spawnTurrets();
 
 	// Regular update step
 	sceneGraph_.update(dt, commandQueue_);
@@ -63,6 +65,7 @@ void World::loadTextures()
    	textures_.load(Textures::Background,		"Media/Textures/EmptyGrid_32x24_Black.png");
 
    	textures_.load(Textures::Minion01,          "Media/Textures/Minion01.png");
+   	textures_.load(Textures::Turret01,          "Media/Textures/Minion01.png");
 }
 
 bool matchesCategories(SceneNode::Pair& colliders, Category::Type type1, Category::Type type2)
@@ -125,8 +128,9 @@ void World::buildScene()
 	backgroundSprite->setPosition(worldBounds_.left, worldBounds_.top);
 	sceneLayers_[Background]->attachChild(std::move(backgroundSprite));
 
-	// Add enemy aircraft
+
 	addMinions();
+	addTurrets();
 }
 
 void World::addMinions()
@@ -139,10 +143,21 @@ void World::addMinions()
     addMinion(Minion::Standard,  -50,  (31.f*3.0)-13.0 );
 }
 
+void World::addTurrets()
+{
+    addTurret(Turret::Standard, (32*6+16), (32*6+16));
+}
+
 void World::addMinion(Minion::Type type, float x, float y)
 {
 	SpawnPoint spawn(type, x, y);
-	minionSpawnPoints_.push_back(spawn);
+    minionSpawnPoints_.push_back(spawn);
+}
+
+void World::addTurret(Turret::Type type, float x, float y)
+{
+	SpawnPoint spawn(type, x, y);
+    turretSpawnPoints_.push_back(spawn);
 }
 
 void World::spawnMinions(sf::Time dt)
@@ -152,7 +167,7 @@ void World::spawnMinions(sf::Time dt)
     {
 		SpawnPoint spawn = minionSpawnPoints_.back();
 
-		std::unique_ptr<Minion> minion(new Minion(spawn.type, textures_, fonts_));
+		std::unique_ptr<Minion> minion(new Minion((Minion::Type)spawn.type, textures_, fonts_));
 		minion->setPosition(spawn.x, spawn.y);
 
 		sceneLayers_[Field]->attachChild(std::move(minion));
@@ -160,6 +175,20 @@ void World::spawnMinions(sf::Time dt)
 		// Enemy is spawned, remove from the list to spawn
 		minionSpawnPoints_.pop_back();
 		timeSinceLastSpawn_ = sf::seconds(0.0f);
+    }
+}
+
+void World::spawnTurrets()
+{
+    SpawnPoint spawn = turretSpawnPoints_.back();
+    while( !turretSpawnPoints_.empty() )
+    {
+        std::unique_ptr<Turret> turret(new Turret((Turret::Type)spawn.type, textures_, fonts_));
+        turret->setPosition(spawn.x, spawn.y);
+
+        sceneLayers_[Field]->attachChild(std::move(turret));
+
+        turretSpawnPoints_.pop_back();
     }
 }
 

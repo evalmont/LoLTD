@@ -10,6 +10,7 @@ namespace Category
 		None				= 0,
 		SceneFieldLayer		= 1 << 0,
 		Minion              = 1 << 1,
+		Turret              = 1 << 2,
 	};
 }
 

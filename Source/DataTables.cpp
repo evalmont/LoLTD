@@ -1,5 +1,7 @@
 #include <DataTables.hpp>
 #include <Minion.hpp>
+#include <Turret.h>
+
 //#include <Projectile.hpp>
 
 // For std::bind() placeholders _1, _2, ...
@@ -16,6 +18,14 @@ std::vector<MinionData> initializeMinionData()
 	data[Minion::Standard].directions.push_back(Direction(+90.f,  (32.f*18)));
 	data[Minion::Standard].directions.push_back(Direction(  0.f,  (32.f*6 )));
 	data[Minion::Standard].directions.push_back(Direction(-90.f,  (32.f*18)));
+
+	return data;
+}
+std::vector<TurretData> initializeTurretData()
+{
+	std::vector<TurretData> data(Turret::TypeCount);
+
+	data[Turret::Standard].texture = Textures::Turret01;
 
 	return data;
 }

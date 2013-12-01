@@ -4,6 +4,7 @@
 #include <ResourceHolder.hpp>
 #include <ResourceIdentifiers.hpp>
 #include <Minion.hpp>
+#include <Turret.h>
 #include <SceneNode.hpp>
 #include <CommandQueue.hpp>
 #include <Command.hpp>
@@ -37,8 +38,11 @@ class World : private sf::NonCopyable
 
 		void								buildScene();
 		void								addMinions();
-		void								addMinion(Minion::Type type, float relX, float relY);
+		void                                addTurrets();
+		void                                addMinion(Minion::Type type, float relX, float relY);
+		void                                addTurret(Turret::Type type, float relX, float relY);
 		void								spawnMinions(sf::Time dt);
+		void                                spawnTurrets();
 		void                                destroyEntitiesOutsideView();
 		sf::FloatRect						getViewBounds() const;
 		sf::FloatRect						getBattlefieldBounds() const;
@@ -54,14 +58,14 @@ class World : private sf::NonCopyable
 
 		struct SpawnPoint
 		{
-			SpawnPoint(Minion::Type type, float x, float y)
+			SpawnPoint(int type, float x, float y)
 			: type(type)
 			, x(x)
 			, y(y)
 			{
 			}
 
-			Minion::Type type;
+			int type;
 			float x;
 			float y;
 		};
@@ -80,6 +84,7 @@ class World : private sf::NonCopyable
 		sf::FloatRect						worldBounds_;
 
 		std::vector<SpawnPoint>				minionSpawnPoints_;
+		std::vector<SpawnPoint>             turretSpawnPoints_;
 		std::vector<Minion*>				activeMinions_;
 		sf::Time                            timeSinceLastSpawn_;
 };
