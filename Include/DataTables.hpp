@@ -35,16 +35,16 @@ struct TurretData
 {
 	Textures::ID					texture;
 };
-/*
+
 struct ProjectileData
 {
 	int								damage;
 	float							speed;
 	Textures::ID					texture;
-};*/
+};
 
-std::vector<MinionData>	initializeMinionData();
-std::vector<TurretData>	initializeTurretData();
-//std::vector<ProjectileData>	initializeProjectileData();
+std::vector<MinionData>	            initializeMinionData();
+std::vector<TurretData>	            initializeTurretData();
+std::vector<ProjectileData>	        initializeProjectileData();
 
 #endif // BOOK_DATATABLES_HPP

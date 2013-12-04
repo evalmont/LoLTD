@@ -18,7 +18,6 @@ World::World(sf::RenderWindow& window, FontHolder& fonts)
 , worldBounds_(0.f, 0.f, worldView_.getSize().x - 200, worldView_.getSize().y) // - 200 to account for the GUI
 , minionSpawnPoints_()
 , turretSpawnPoints_()
-, activeMinions_()
 , timeSinceLastSpawn_(sf::seconds(0.0f))
 {
 	loadTextures();
@@ -66,6 +65,7 @@ void World::loadTextures()
 
    	textures_.load(Textures::Minion01,          "Media/Textures/Minion01.png");
    	textures_.load(Textures::Turret01,          "Media/Textures/Minion01.png");
+   	textures_.load(Textures::Projectile01,      "Media/Textures/Minion01.png");
 }
 
 bool matchesCategories(SceneNode::Pair& colliders, Category::Type type1, Category::Type type2)
@@ -127,7 +127,6 @@ void World::buildScene()
 	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(texture, textureRect));
 	backgroundSprite->setPosition(worldBounds_.left, worldBounds_.top);
 	sceneLayers_[Background]->attachChild(std::move(backgroundSprite));
-
 
 	addMinions();
 	addTurrets();

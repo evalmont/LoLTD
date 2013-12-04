@@ -11,6 +11,7 @@ namespace Category
 		SceneFieldLayer		= 1 << 0,
 		Minion              = 1 << 1,
 		Turret              = 1 << 2,
+		Projectile          = 1 << 3
 	};
 }
 

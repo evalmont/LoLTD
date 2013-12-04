@@ -1,4 +1,4 @@
-#include "Turret.h"
+#include <Turret.hpp>
 #include <DataTables.hpp>
 #include <Utility.hpp>
 #include <CommandQueue.hpp>
@@ -13,7 +13,6 @@ namespace
 {
 	const std::vector<TurretData> Table = initializeTurretData();
 }
-
 
 Turret::Turret(Type type, const TextureHolder& textures, const FontHolder& fonts)
 : SceneNode(Category::Turret)

@@ -16,7 +16,7 @@ bool GameState::update(sf::Time dt)
 {
 	world_.update(dt);
 
-	CommandQueue& commands = world_.getCommandQueue();
+	//CommandQueue& commands = world_.getCommandQueue();
 	//mPlayer.handleRealtimeInput(commands);
 
 	return true;
@@ -25,7 +25,7 @@ bool GameState::update(sf::Time dt)
 bool GameState::handleEvent(const sf::Event& event)
 {
 	// Game input handling
-	CommandQueue& commands = world_.getCommandQueue();
+	//CommandQueue& commands = world_.getCommandQueue();
 	//mPlayer.handleEvent(event, commands);
 
 	// Escape pressed, trigger the pause screen

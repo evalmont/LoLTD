@@ -17,12 +17,11 @@ class Turret : public SceneNode
         };
                                 Turret(Type type, const TextureHolder& textures, const FontHolder& fonts);
 
-        virtual void			drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
-		virtual void 			updateCurrent(sf::Time dt, CommandQueue& commands);
-		virtual unsigned int	getCategory() const;
-		virtual sf::FloatRect	getBoundingRect() const;
+        void			        drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
+		void 			        updateCurrent(sf::Time dt, CommandQueue& commands);
+		unsigned int	        getCategory() const;
+		sf::FloatRect	        getBoundingRect() const;
 
-    protected:
     private:
         Type                    type_;
         sf::Sprite              sprite_;

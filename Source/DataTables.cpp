@@ -1,6 +1,7 @@
 #include <DataTables.hpp>
 #include <Minion.hpp>
-#include <Turret.h>
+#include <Turret.hpp>
+#include <Projectile.hpp>
 
 //#include <Projectile.hpp>
 
@@ -12,7 +13,7 @@ std::vector<MinionData> initializeMinionData()
 	std::vector<MinionData> data(Minion::TypeCount);
 
 	data[Minion::Standard].hitpoints = 100;
-	data[Minion::Standard].speed = 300.f;
+	data[Minion::Standard].speed = 100.f;
 	data[Minion::Standard].texture = Textures::Minion01;
 	data[Minion::Standard].directions.push_back(Direction(  0.f,  (32.f*6 )));
 	data[Minion::Standard].directions.push_back(Direction(+90.f,  (32.f*18)));
@@ -29,11 +30,11 @@ std::vector<TurretData> initializeTurretData()
 
 	return data;
 }
-/*
+
 std::vector<ProjectileData> initializeProjectileData()
 {
 	std::vector<ProjectileData> data(Projectile::TypeCount);
-
+/*
 	data[Projectile::AlliedBullet].damage = 10;
 	data[Projectile::AlliedBullet].speed = 300.f;
 	data[Projectile::AlliedBullet].texture = Textures::Bullet;
@@ -45,6 +46,10 @@ std::vector<ProjectileData> initializeProjectileData()
 	data[Projectile::Missile].damage = 200;
 	data[Projectile::Missile].speed = 150.f;
 	data[Projectile::Missile].texture = Textures::Missile;
+*/
 
+    data[Projectile::Projectile01].damage = 50;
+    data[Projectile::Projectile01].speed = 200.f;
+    data[Projectile::Projectile01].texture = Textures::Projectile01;
 	return data;
-}*/
+}

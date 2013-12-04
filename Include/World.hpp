@@ -4,7 +4,7 @@
 #include <ResourceHolder.hpp>
 #include <ResourceIdentifiers.hpp>
 #include <Minion.hpp>
-#include <Turret.h>
+#include <Turret.hpp>
 #include <SceneNode.hpp>
 #include <CommandQueue.hpp>
 #include <Command.hpp>
@@ -73,9 +73,9 @@ class World : private sf::NonCopyable
 
 	private:
 		sf::RenderWindow&					window_;
+		FontHolder&							fonts_;
 		sf::View							worldView_;
 		TextureHolder						textures_;
-		FontHolder&							fonts_;
 
 		SceneNode							sceneGraph_;
 		std::array<SceneNode*, LayerCount>	sceneLayers_;
@@ -85,7 +85,6 @@ class World : private sf::NonCopyable
 
 		std::vector<SpawnPoint>				minionSpawnPoints_;
 		std::vector<SpawnPoint>             turretSpawnPoints_;
-		std::vector<Minion*>				activeMinions_;
 		sf::Time                            timeSinceLastSpawn_;
 };
 

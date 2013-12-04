@@ -41,8 +41,8 @@ class Minion : public SceneNode
 
 	private:
 		Type					type_;
-		sf::Sprite				sprite_;
 		bool 					isMarkedForRemoval_;
+		sf::Sprite				sprite_;
 
         int                     hitpoints_;
 		sf::Vector2f			velocity_;

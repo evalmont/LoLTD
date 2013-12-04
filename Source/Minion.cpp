@@ -19,9 +19,9 @@ Minion::Minion(Type type, const TextureHolder& textures, const FontHolder& fonts
 , type_(type)
 , isMarkedForRemoval_(false)
 , sprite_(textures.get(Table[type].texture))
+, hitpoints_(Table[type].hitpoints)
 , travelledDistance_(0.f)
 , directionIndex_(0)
-, hitpoints_(Table[type].hitpoints)
 {
 	centerOrigin(sprite_);
 

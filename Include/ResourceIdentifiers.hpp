@@ -18,7 +18,8 @@ namespace Textures
 		ButtonSelected,
 		ButtonPressed,
 		Minion01,
-		Turret01
+		Turret01,
+		Projectile01
 	};
 }
 
